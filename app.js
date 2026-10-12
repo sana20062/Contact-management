@@ -5,6 +5,7 @@ const connectDB = require("./config/db");
 const auth = require("./middlewares/auth");
 
 const app = express();
+const cors = require("cors"); app.use(cors());
 
 // Middlewares
 app.use(express.json());

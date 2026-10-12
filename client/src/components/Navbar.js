@@ -1,25 +1,56 @@
-import { Link } from "react-router-dom"; 
-const Navbar = ({ title = "CMS" }) =>{
-     return(
-        <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
-            <div className="container">
-                <Link className="navbar-brand" to="/">{title}</Link>
-                <div className="collapse navbar-collapse">
-                    <ul className="navbar-nav ms-auto">
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/login">
-                                Login
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/register">
-                                Register
-                            </Link>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-     );
-    };
-    export default Navbar;
+import { useContext } from "react";
+import { Link } from "react-router-dom";
+import AuthContext from "../context/AuthContext";
+
+const Navbar = () => {
+  const authContext = useContext(AuthContext);
+
+  // Prevent a crash if the provider is missing
+  if (!authContext) {
+    return (
+      <div className="alert alert-danger">
+        AuthContextProvider is missing. Please check App setup.
+      </div>
+    );
+  }
+
+  const { user, logoutUser } = authContext;
+
+  return (
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+      <Link className="navbar-brand" to="/">
+        Contact Manager
+      </Link>
+
+      <div className="ms-auto d-flex align-items-center gap-3">
+        {user ? (
+          <>
+            <span className="text-white">
+              Welcome, {user.name || user.email || "User"}
+            </span>
+
+            <button
+              type="button"
+              className="btn btn-outline-light"
+              onClick={logoutUser}
+            >
+              Logout
+            </button>
+          </>
+        ) : (
+          <>
+            <Link className="btn btn-outline-light" to="/login">
+              Login
+            </Link>
+
+            <Link className="btn btn-primary" to="/register">
+              Register
+            </Link>
+          </>
+        )}
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;
