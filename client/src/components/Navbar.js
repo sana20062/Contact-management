@@ -1,53 +1,74 @@
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
+import ToastContext from "../context/ToastContext";
 
-const Navbar = () => {
-  const authContext = useContext(AuthContext);
-
-  // Prevent a crash if the provider is missing
-  if (!authContext) {
-    return (
-      <div className="alert alert-danger">
-        AuthContextProvider is missing. Please check App setup.
-      </div>
-    );
-  }
-
-  const { user, logoutUser } = authContext;
+const Navbar = ({ title = "CMS" }) => {
+  const navigate = useNavigate();
+  const { user, setUser } = useContext(AuthContext);
+  const { toast } = useContext(ToastContext);
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-3">
-      <Link className="navbar-brand" to="/">
-        Contact Manager
-      </Link>
+    <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div className="container-fluid">
+        <Link to="/">
+          <a className="navbar-brand">{title}</a>
+        </Link>
 
-      <div className="ms-auto d-flex align-items-center gap-3">
-        {user ? (
-          <>
-            <span className="text-white">
-              Welcome, {user.name || user.email || "User"}
-            </span>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarColor01"
+          aria-controls="navbarColor01"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
 
-            <button
-              type="button"
-              className="btn btn-outline-light"
-              onClick={logoutUser}
-            >
-              Logout
-            </button>
-          </>
-        ) : (
-          <>
-            <Link className="btn btn-outline-light" to="/login">
-              Login
-            </Link>
-
-            <Link className="btn btn-primary" to="/register">
-              Register
-            </Link>
-          </>
-        )}
+        <div className="collapse navbar-collapse" id="navbarColor01">
+          <ul className="navbar-nav ms-auto">
+            {user ? (
+              <>
+                <li className="nav-item">
+                  <Link to="/mycontacts">
+                    <a className="nav-link">All Contacts</a>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/create">
+                    <a className="nav-link">Create</a>
+                  </Link>
+                </li>
+                <li
+                  className="nav-item"
+                  onClick={() => {
+                    setUser(null);
+                    localStorage.clear();
+                    toast.success("Logged out.");
+                    navigate("/login", { replace: true });
+                  }}
+                >
+                  <button className="btn btn-danger">Logout</button>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="nav-item">
+                  <Link to="/login">
+                    <a className="nav-link">Login</a>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/register">
+                    <a className="nav-link">Register</a>
+                  </Link>
+                </li>
+              </>
+            )}
+          </ul>
+        </div>
       </div>
     </nav>
   );

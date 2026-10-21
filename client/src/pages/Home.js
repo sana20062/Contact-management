@@ -1,14 +1,24 @@
-import Layout from "../components/layout"; 
+import React, { useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import AuthContext from "../context/AuthContext";
 
-const Home = () => { 
-  return ( 
-    <Layout>
-      <div className="container my-5 text-center">
-        <h1>Welcome to Our Application</h1>
-        <p className="lead">This is the home page. Please login or register to get started.</p>
+const Home = () => {
+  const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+  useEffect(() => {
+    !user && navigate("/login", { replace: true });
+  }, []);
+  return (
+    <>
+      <div className="jumbotron">
+        <h1>Welcome {user ? user.name : null}</h1>
+        <hr className="my-4" />
+        <a className="btn btn-info" href="#" role="button">
+          Add Contacts
+        </a>
       </div>
-    </Layout>
-  ); 
-}; 
+    </>
+  );
+};
 
 export default Home;

@@ -1,11 +1,13 @@
-
-import { useState, useContext } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import Layout from "../components/layout";
+
 import AuthContext from "../context/AuthContext";
 import ToastContext from "../context/ToastContext";
 
 const Register = () => {
+  const { toast } = useContext(ToastContext);
+  const { registerUser } = useContext(AuthContext);
+
   const [credentials, setCredentials] = useState({
     name: "",
     email: "",
@@ -13,61 +15,46 @@ const Register = () => {
     confirmPassword: "",
   });
 
-  const { registerUser } = useContext(AuthContext);
-  const { toast } = useContext(ToastContext);
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
 
-  // Handle input changes
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-
-    setCredentials((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setCredentials({ ...credentials, [name]: value });
   };
 
-  // Handle registration form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault();
 
-    // Check required fields
     if (
-      !credentials.name.trim() ||
-      !credentials.email.trim() ||
+      !credentials.email ||
       !credentials.password ||
       !credentials.confirmPassword
     ) {
-      toast.error("Please enter all required fields");
+      toast.error("please enter all the required fields!");
       return;
     }
 
-    // Check whether passwords match
     if (credentials.password !== credentials.confirmPassword) {
-      toast.error("Passwords do not match");
+      toast.error("password do not match!");
       return;
     }
 
-    // Remove confirmPassword before sending data to backend
-    const userData = {
-      name: credentials.name.trim(),
-      email: credentials.email.trim(),
-      password: credentials.password,
-    };
-
-    // Register user through AuthContext
+    const userData = { ...credentials, confirmPassword: undefined };
     registerUser(userData);
   };
 
   return (
-    <Layout>
-      <h3>Register</h3>
+    <>
+      <h3>Create your account</h3>
 
       <form onSubmit={handleSubmit}>
-        <div className="form-group my-2">
-          <label className="form-label">Name</label>
+        <div class="form-group">
+          <label for="nameInput" class="form-label mt-4">
+            Your Name
+          </label>
           <input
             type="text"
-            className="form-control"
+            class="form-control"
+            id="nameInput"
             name="name"
             value={credentials.name}
             onChange={handleInputChange}
@@ -75,12 +62,15 @@ const Register = () => {
             required
           />
         </div>
-
-        <div className="form-group my-2">
-          <label className="form-label">Email address</label>
+        <div class="form-group">
+          <label for="emailInput" class="form-label mt-4">
+            Email address
+          </label>
           <input
             type="email"
-            className="form-control"
+            class="form-control"
+            id="emailInput"
+            aria-describedby="emailHelp"
             name="email"
             value={credentials.email}
             onChange={handleInputChange}
@@ -88,42 +78,46 @@ const Register = () => {
             required
           />
         </div>
-
-        <div className="form-group my-2">
-          <label className="form-label">Password</label>
+        <div class="form-group">
+          <label for="passwordInput" class="form-label mt-4">
+            Password
+          </label>
           <input
             type="password"
-            className="form-control"
+            class="form-control"
+            id="passwordInput"
             name="password"
             value={credentials.password}
             onChange={handleInputChange}
-            placeholder="Enter password"
+            placeholder="Enter Password"
             required
           />
         </div>
-
-        <div className="form-group my-2">
-          <label className="form-label">Confirm Password</label>
+        <div class="form-group">
+          <label for="confirmPassword" class="form-label mt-4">
+            Confirm Password
+          </label>
           <input
             type="password"
-            className="form-control"
+            class="form-control"
+            id="confirmPassword"
             name="confirmPassword"
             value={credentials.confirmPassword}
             onChange={handleInputChange}
-            placeholder="Confirm password"
+            placeholder="Enter Password"
             required
           />
         </div>
-
-        <button type="submit" className="btn btn-primary my-2">
-          Register
-        </button>
-
+        <input
+          type="submit"
+          value="Register"
+          className="btn btn-primary my-3"
+        />
         <p>
-          Already have an account? <Link to="/login">Login here</Link>
+          Already have an account ? <Link to="/login">Login</Link>
         </p>
       </form>
-    </Layout>
+    </>
   );
 };
 

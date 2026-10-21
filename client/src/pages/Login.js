@@ -1,35 +1,29 @@
-
-import { useState, useContext } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import Layout from "../components/layout";
+
 import AuthContext from "../context/AuthContext";
 import ToastContext from "../context/ToastContext";
 
 const Login = () => {
+  const { toast } = useContext(ToastContext);
+  const { loginUser } = useContext(AuthContext);
+
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
   });
 
-  const { loginUser } = useContext(AuthContext);
-  const { toast } = useContext(ToastContext);
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
 
-  // Handle input changes
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-
-    setCredentials((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setCredentials({ ...credentials, [name]: value });
   };
 
-  // Handle login form submission (only one declaration)
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault();
 
-    if (!credentials.email.trim() || !credentials.password) {
-      toast.error("Please enter all required fields");
+    if (!credentials.email || !credentials.password) {
+      toast.error("please enter all the required fields!");
       return;
     }
 
@@ -37,15 +31,19 @@ const Login = () => {
   };
 
   return (
-    <Layout>
+    <>
       <h3>Login</h3>
 
       <form onSubmit={handleSubmit}>
-        <div className="form-group my-2">
-          <label className="form-label">Email address</label>
+        <div className="form-group">
+          <label htmlFor="emailInput" className="form-label mt-4">
+            Email address
+          </label>
           <input
             type="email"
             className="form-control"
+            id="emailInput"
+            aria-describedby="emailHelp"
             name="email"
             value={credentials.email}
             onChange={handleInputChange}
@@ -53,29 +51,27 @@ const Login = () => {
             required
           />
         </div>
-
-        <div className="form-group my-2">
-          <label className="form-label">Password</label>
+        <div className="form-group">
+          <label htmlFor="passwordInput" className="form-label mt-4">
+            Password
+          </label>
           <input
             type="password"
             className="form-control"
+            id="passwordInput"
             name="password"
             value={credentials.password}
             onChange={handleInputChange}
-            placeholder="Enter password"
+            placeholder="Enter Password"
             required
           />
         </div>
-
-        <button type="submit" className="btn btn-primary my-2">
-          Login
-        </button>
-
+        <input type="submit" value="Login" className="btn btn-primary my-3" />
         <p>
-          Don't have an account? <Link to="/register">Register here</Link>
+          Don't have an account ? <Link to="/register">Create One</Link>
         </p>
       </form>
-    </Layout>
+    </>
   );
 };
 
