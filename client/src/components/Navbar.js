@@ -8,11 +8,18 @@ const Navbar = ({ title = "CMS" }) => {
   const { user, setUser } = useContext(AuthContext);
   const { toast } = useContext(ToastContext);
 
+  const handleLogout = () => {
+    setUser(null);
+    localStorage.clear();
+    toast.success("Logged out successfully.");
+    navigate("/login", { replace: true });
+  };
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
       <div className="container-fluid">
-        <Link to="/">
-          <a className="navbar-brand">{title}</a>
+        <Link to="/" className="navbar-brand fw-bold">
+          {title}
         </Link>
 
         <button
@@ -28,41 +35,41 @@ const Navbar = ({ title = "CMS" }) => {
         </button>
 
         <div className="collapse navbar-collapse" id="navbarColor01">
-          <ul className="navbar-nav ms-auto">
+          <ul className="navbar-nav ms-auto align-items-center">
             {user ? (
               <>
                 <li className="nav-item">
-                  <Link to="/mycontacts">
-                    <a className="nav-link">All Contacts</a>
+                  <Link to="/mycontacts" className="nav-link">
+                    Contacts
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/create">
-                    <a className="nav-link">Create</a>
+                  <Link to="/create" className="nav-link">
+                    + Add Contact
                   </Link>
                 </li>
-                <li
-                  className="nav-item"
-                  onClick={() => {
-                    setUser(null);
-                    localStorage.clear();
-                    toast.success("Logged out.");
-                    navigate("/login", { replace: true });
-                  }}
-                >
-                  <button className="btn btn-danger">Logout</button>
+                <li className="nav-item ms-lg-2 mt-2 mt-lg-0">
+                  <span className="badge bg-secondary me-2">
+                    {user.name}
+                  </span>
+                  <button
+                    className="btn btn-sm btn-danger"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
                 </li>
               </>
             ) : (
               <>
                 <li className="nav-item">
-                  <Link to="/login">
-                    <a className="nav-link">Login</a>
+                  <Link to="/login" className="nav-link">
+                    Login
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/register">
-                    <a className="nav-link">Register</a>
+                  <Link to="/register" className="nav-link">
+                    Register
                   </Link>
                 </li>
               </>
