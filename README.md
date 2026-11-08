@@ -237,14 +237,13 @@ npm start
 
 | Screen | Preview |
 | :--- | :--- |
-| **Login Page** | *[Insert Screenshot: docs/login.png]* |
-| **Registration Page** | *[Insert Screenshot: docs/register.png]* |
-| **Dashboard & Birthday Reminders** | *[Insert Screenshot: docs/dashboard.png]* |
-| **Contacts Table & Search** | *[Insert Screenshot: docs/contacts_list.png]* |
-| **Add / Edit Contact Form** | *[Insert Screenshot: docs/contact_form.png]* |
-| **Bulk Actions & Tagging** | *[Insert Screenshot: docs/bulk_actions.png]* |
-| **CSV Import & Duplicate Warning** | *[Insert Screenshot: docs/modals.png]* |
-
+| **Login Page** | ![Login Page](docs/login.png) |
+| **Registration Page** | ![Registration Page](docs/register.png) |
+| **Dashboard & Birthday Reminders** | ![Dashboard](docs/dashboard.png) |
+| **Contacts Table & Search** | ![Contacts Table](docs/contacts_list.png) |
+| **Add / Edit Contact Form** | ![Contact Form](docs/contact_form.png) |
+| **Bulk Actions & Tagging** | ![Bulk Actions](docs/bulk_actions.png) |
+| **CSV Import & Duplicate Warning** | ![CSV Import and Duplicate Warning](docs/modals.png) |
 ---
 
 ## Future Improvements
