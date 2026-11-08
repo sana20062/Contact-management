@@ -238,9 +238,9 @@ npm start
 | Screen | Preview |
 | :--- | :--- |
 | **Login Page** | ![Login Page](docs/login.png) |
-| **Registration Page** | ![Registration Page](docs/register.png) |
+| **Registration Page** | ![Registration Page](docs/registration.png) |
 | **Dashboard & Birthday Reminders** | ![Dashboard](docs/dashboard.png) |
-| **Contacts Table & Search** | ![Contacts Table](docs/contacts_list.png) |
+| **Contacts Table & Search** | ![Contacts Table](docs/contact_list.png) |
 | **Add / Edit Contact Form** | ![Contact Form](docs/contact_form.png) |
 | **Bulk Actions & Tagging** | ![Bulk Actions](docs/bulk_actions.png) |
 | **CSV Import & Duplicate Warning** | ![CSV Import and Duplicate Warning](docs/modals.png) |
