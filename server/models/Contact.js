@@ -33,6 +33,24 @@ const ContactSchema = new mongoose.Schema(
       default: "",
       trim: true,
     },
+    group: {
+      type: String,
+      default: "Other",
+      trim: true,
+    },
+    birthday: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    isFavorite: {
+      type: Boolean,
+      default: false,
+    },
+    photo: {
+      type: String,
+      default: "",
+    },
     postedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -70,6 +88,11 @@ const validateContact = (data) => {
       }),
     company: Joi.string().max(100).allow("").optional(),
     notes: Joi.string().max(1000).allow("").optional(),
+    group: Joi.string().max(50).allow("").optional(),
+    birthday: Joi.string().allow("").optional(),
+    isFavorite: Joi.boolean().optional(),
+    photo: Joi.string().allow("").optional(),
+    force: Joi.boolean().optional(),
     id: Joi.string().optional(),
   });
 

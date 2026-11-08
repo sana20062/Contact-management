@@ -4,12 +4,11 @@ const morgan = require("morgan");
 
 const connectDB = require("./config/db");
 
-const auth = require("./middlewares/auth");
-
 const app = express();
 
-// middlewares
-app.use(express.json());
+// middlewares - allow up to 10MB for base64 contact photos
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(morgan("tiny"));
 app.use(require("cors")());
 
