@@ -186,18 +186,6 @@ npm start
 
 ---
 
-## Team Members
-
-<!-- Note: Add your group members' names, roles, and GitHub profiles below -->
-
-| Name | Role / Contribution | GitHub / Contact |
-| :--- | :--- | :--- |
-| *[Member 1 Name]* | Frontend / Backend Developer | [@username](https://github.com/) |
-| *[Member 2 Name]* | Frontend / UI Designer | [@username](https://github.com/) |
-| *[Member 3 Name]* | Backend / Database Management | [@username](https://github.com/) |
-| *[Member 4 Name]* | Testing / Documentation | [@username](https://github.com/) |
-
----
 
 ## Usage
 
