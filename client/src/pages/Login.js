@@ -42,14 +42,15 @@ const Login = () => {
   };
 
   return (
-    <div className="row justify-content-center mt-4">
-      <div className="col-md-6 col-lg-5">
-        <div className="card shadow-sm p-4">
-          <h3 className="card-title text-center mb-3">Sign In</h3>
+    <div className="row justify-content-center align-items-center" style={{ minHeight: "75vh" }}>
+      <div className="col-11 col-sm-9 col-md-7 col-lg-5">
+        <div className="card p-4 p-md-5">
+          <h3 className="text-center mb-4">SIGN IN</h3>
+
           <form onSubmit={handleSubmit} noValidate>
             <div className="form-group mb-3">
-              <label htmlFor="emailInput" className="form-label">
-                Email Address
+              <label htmlFor="emailInput" className="form-label mb-2">
+                EMAIL ADDRESS:
               </label>
               <input
                 type="email"
@@ -62,9 +63,10 @@ const Login = () => {
                 required
               />
             </div>
-            <div className="form-group mb-3">
-              <label htmlFor="passwordInput" className="form-label">
-                Password
+
+            <div className="form-group mb-4">
+              <label htmlFor="passwordInput" className="form-label mb-2">
+                PASSWORD:
               </label>
               <input
                 type="password"
@@ -77,14 +79,16 @@ const Login = () => {
                 required
               />
             </div>
+
             <button
               type="submit"
-              className="btn btn-primary w-100 my-2"
+              className="btn btn-primary w-100 py-2 mb-3"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Logging In..." : "Login"}
+              {isSubmitting ? "LOGGING IN..." : "LOGIN"}
             </button>
-            <p className="text-center mt-3 mb-0">
+
+            <p className="text-center mt-3 mb-0 small" style={{ fontFamily: "var(--cms-font-serif)" }}>
               Don't have an account? <Link to="/register">Create One</Link>
             </p>
           </form>

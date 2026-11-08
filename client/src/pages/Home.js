@@ -5,13 +5,12 @@ import { getInitials } from "../utils/imageHelper";
 
 const getAvatarColor = (name = "") => {
   const colors = [
-    "#3b82f6",
-    "#10b981",
-    "#8b5cf6",
-    "#ec4899",
-    "#f59e0b",
-    "#06b6d4",
-    "#6366f1",
+    "#8C434F",
+    "#BF788C",
+    "#675C5C",
+    "#4A3E40",
+    "#9E5D6A",
+    "#5A4A4D",
   ];
   let hash = 0;
   for (let i = 0; i < name.length; i++) {
@@ -126,7 +125,6 @@ const Home = () => {
       }
     });
 
-    // Sort by soonest first
     list.sort((a, b) => a.daysLeft - b.daysLeft);
     return list;
   }, [contacts]);
@@ -139,62 +137,102 @@ const Home = () => {
   return (
     <div className="container py-4">
       {/* Welcome Hero Banner */}
-      <div className="p-5 mb-4 bg-light rounded-3 shadow-sm border">
-        <h1 className="display-5 fw-bold">
-          Welcome back, {user ? user.name : "User"}!
+      <div className="hero-box p-4 p-md-5 mb-4">
+        <h1 className="display-6 fw-bold mb-3">
+          WELCOME BACK, {user ? user.name : "USER"}!
         </h1>
-        <p className="col-md-9 fs-5 text-muted">
+        <p className="fs-6 text-muted mb-4" style={{ fontFamily: "var(--cms-font-serif)", maxWidth: "750px" }}>
           Your personal and professional Contact Management System. Store,
-          organize, edit, search, and manage your contacts securely in one place.
+          organize, edit, search, and manage your connections securely in one place.
         </p>
 
         {/* Quick Stats */}
-        <div className="d-flex gap-4 my-3 flex-wrap">
-          <div className="bg-white p-3 rounded border shadow-sm text-center" style={{ minWidth: "140px" }}>
-            <span className="text-muted small text-uppercase fw-bold">Total Contacts</span>
-            <h3 className="mb-0 text-primary">{contacts.length}</h3>
+        <div className="d-flex gap-3 mb-4 flex-wrap">
+          <div
+            className="p-3 rounded border text-center"
+            style={{
+              backgroundColor: "var(--cms-card-inner)",
+              minWidth: "150px",
+              borderColor: "var(--cms-border-subtle)",
+            }}
+          >
+            <span className="small text-uppercase fw-bold" style={{ fontFamily: "var(--cms-font-serif)" }}>
+              Total Contacts
+            </span>
+            <h3 className="mb-0 mt-1">{contacts.length}</h3>
           </div>
-          <div className="bg-white p-3 rounded border shadow-sm text-center" style={{ minWidth: "140px" }}>
-            <span className="text-muted small text-uppercase fw-bold">Favorites</span>
-            <h3 className="mb-0 text-warning">⭐ {favoritesCount}</h3>
+
+          <div
+            className="p-3 rounded border text-center"
+            style={{
+              backgroundColor: "var(--cms-card-inner)",
+              minWidth: "150px",
+              borderColor: "var(--cms-border-subtle)",
+            }}
+          >
+            <span className="small text-uppercase fw-bold" style={{ fontFamily: "var(--cms-font-serif)" }}>
+              Favorites
+            </span>
+            <h3 className="mb-0 mt-1">{favoritesCount}</h3>
           </div>
-          <div className="bg-white p-3 rounded border shadow-sm text-center" style={{ minWidth: "140px" }}>
-            <span className="text-muted small text-uppercase fw-bold">Upcoming B'days</span>
-            <h3 className="mb-0 text-success">🎂 {upcomingBirthdays.length}</h3>
+
+          <div
+            className="p-3 rounded border text-center"
+            style={{
+              backgroundColor: "var(--cms-card-inner)",
+              minWidth: "150px",
+              borderColor: "var(--cms-border-subtle)",
+            }}
+          >
+            <span className="small text-uppercase fw-bold" style={{ fontFamily: "var(--cms-font-serif)" }}>
+              Upcoming Birthdays
+            </span>
+            <h3 className="mb-0 mt-1">{upcomingBirthdays.length}</h3>
           </div>
         </div>
 
-        <hr className="my-4" />
-
         <div className="d-flex gap-3 flex-wrap">
-          <Link to="/mycontacts" className="btn btn-primary btn-lg">
-            View All Contacts
+          <Link to="/mycontacts" className="btn btn-primary">
+            VIEW ALL CONTACTS
           </Link>
-          <Link to="/create" className="btn btn-outline-info btn-lg">
-            + Add New Contact
+          <Link to="/create" className="btn btn-outline-secondary">
+            ADD NEW CONTACT
           </Link>
         </div>
       </div>
 
       {/* Birthday Reminders Section */}
       <div className="card shadow-sm border-0 mb-4">
-        <div className="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center flex-wrap gap-2">
-          <h4 className="mb-0 d-flex align-items-center gap-2">
-            <span>🎂</span>
-            <span>Upcoming Birthday Reminders</span>
+        <div
+          className="card-header py-3 d-flex justify-content-between align-items-center flex-wrap gap-2"
+          style={{
+            backgroundColor: "var(--cms-card-inner)",
+            borderBottom: "1px solid var(--cms-border-subtle)",
+          }}
+        >
+          <h4 className="mb-0">
+            UPCOMING BIRTHDAYS (NEXT 30 DAYS)
           </h4>
-          <span className="badge bg-secondary">Next 30 Days</span>
+          <span
+            className="badge"
+            style={{ backgroundColor: "var(--cms-input-border)", color: "#FFFFFF" }}
+          >
+            30 Days
+          </span>
         </div>
 
         <div className="card-body p-4">
           {loading ? (
-            <p className="text-muted mb-0">Checking upcoming birthdays...</p>
+            <p className="text-muted mb-0" style={{ fontFamily: "var(--cms-font-serif)" }}>
+              Checking upcoming birthdays...
+            </p>
           ) : upcomingBirthdays.length === 0 ? (
             <div className="text-center py-4">
-              <span style={{ fontSize: "2.5rem" }}>🎈</span>
-              <h5 className="mt-2 text-secondary">No upcoming birthdays in the next 30 days</h5>
-              <p className="text-muted small mb-0">
-                Add birthdays to your contacts in the Edit or Create forms to see automatic reminders here!
+              <h5 className="mt-2 text-secondary">
+                NO UPCOMING BIRTHDAYS IN THE NEXT 30 DAYS
+              </h5>
+              <p className="text-muted small mb-0" style={{ fontFamily: "var(--cms-font-serif)" }}>
+                Add birthdays to your contacts in the Edit or Create forms to see automatic reminders here.
               </p>
             </div>
           ) : (
@@ -202,13 +240,11 @@ const Home = () => {
               {upcomingBirthdays.map((item) => (
                 <div key={item.contact._id} className="col-md-6 col-lg-4">
                   <div
-                    className={`card h-100 border p-3 shadow-sm ${
-                      item.isToday
-                        ? "border-danger bg-danger bg-opacity-10"
-                        : item.isTomorrow
-                        ? "border-warning bg-warning bg-opacity-10"
-                        : "bg-white"
-                    }`}
+                    className="card h-100 p-3"
+                    style={{
+                      backgroundColor: "var(--cms-card-inner)",
+                      borderColor: "var(--cms-border-subtle)",
+                    }}
                   >
                     <div className="d-flex align-items-center gap-3">
                       {/* Avatar */}
@@ -221,7 +257,7 @@ const Home = () => {
                             height: "50px",
                             borderRadius: "50%",
                             objectFit: "cover",
-                            border: "2px solid #cbd5e1",
+                            border: "2px solid var(--cms-input-border)",
                           }}
                         />
                       ) : (
@@ -237,6 +273,7 @@ const Home = () => {
                             justifyContent: "center",
                             fontWeight: "bold",
                             fontSize: "1.1rem",
+                            fontFamily: "var(--cms-font-heading)",
                           }}
                         >
                           {getInitials(item.contact.name)}
@@ -252,11 +289,23 @@ const Home = () => {
                           {item.contact.company || item.contact.email}
                         </small>
                         <div className="mt-1 d-flex align-items-center gap-1 flex-wrap">
-                          <span className="badge bg-light text-dark border">
-                            📅 {item.formattedDate}
+                          <span
+                            className="badge border"
+                            style={{
+                              backgroundColor: "var(--cms-card-bg)",
+                              color: "var(--cms-heading-color)",
+                            }}
+                          >
+                            {item.formattedDate}
                           </span>
                           {item.turnsAge && (
-                            <span className="badge bg-info text-dark">
+                            <span
+                              className="badge"
+                              style={{
+                                backgroundColor: "var(--cms-btn-primary)",
+                                color: "var(--cms-btn-text)",
+                              }}
+                            >
                               Turns {item.turnsAge}
                             </span>
                           )}
@@ -265,19 +314,28 @@ const Home = () => {
                     </div>
 
                     {/* Countdown Badge & Actions */}
-                    <div className="mt-3 pt-2 border-top d-flex justify-content-between align-items-center">
+                    <div
+                      className="mt-3 pt-2 d-flex justify-content-between align-items-center"
+                      style={{ borderTop: "1px solid var(--cms-border-subtle)" }}
+                    >
                       <div>
                         {item.isToday ? (
-                          <span className="badge bg-danger fs-6">
-                            🎉 Today!
+                          <span className="badge bg-danger">
+                            TODAY
                           </span>
                         ) : item.isTomorrow ? (
-                          <span className="badge bg-warning text-dark fs-6">
-                            Tomorrow!
+                          <span
+                            className="badge"
+                            style={{
+                              backgroundColor: "var(--cms-btn-primary)",
+                              color: "var(--cms-btn-text)",
+                            }}
+                          >
+                            TOMORROW
                           </span>
                         ) : (
                           <span className="badge bg-secondary">
-                            In {item.daysLeft} days
+                            IN {item.daysLeft} DAYS
                           </span>
                         )}
                       </div>
@@ -286,17 +344,19 @@ const Home = () => {
                         {item.contact.email && (
                           <a
                             href={`mailto:${item.contact.email}?subject=Happy%20Birthday!`}
-                            className="btn btn-sm btn-outline-primary"
+                            className="btn btn-sm btn-primary"
+                            style={{ padding: "4px 12px", fontSize: "0.75rem" }}
                             title="Send Birthday Email"
                           >
-                            ✉️ Wish
+                            WISH
                           </a>
                         )}
                         <Link
                           to={`/edit/${item.contact._id}`}
                           className="btn btn-sm btn-outline-secondary"
+                          style={{ padding: "4px 12px", fontSize: "0.75rem" }}
                         >
-                          View
+                          VIEW
                         </Link>
                       </div>
                     </div>

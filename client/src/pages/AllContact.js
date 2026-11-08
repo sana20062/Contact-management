@@ -11,27 +11,26 @@ const PRESET_GROUPS = ["All", "Work", "Family", "Friends", "Other"];
 const getGroupBadgeClass = (group) => {
   switch (group) {
     case "Work":
-      return "bg-primary";
+      return "bg-dark text-white";
     case "Family":
-      return "bg-success";
+      return "bg-secondary text-white";
     case "Friends":
-      return "bg-info text-dark";
+      return "bg-light text-dark border";
     case "Other":
-      return "bg-secondary";
+      return "bg-secondary text-white";
     default:
-      return "bg-dark";
+      return "bg-dark text-white";
   }
 };
 
 const getAvatarColor = (name = "") => {
   const colors = [
-    "#3b82f6",
-    "#10b981",
-    "#8b5cf6",
-    "#ec4899",
-    "#f59e0b",
-    "#06b6d4",
-    "#6366f1",
+    "#8C434F",
+    "#BF788C",
+    "#675C5C",
+    "#4A3E40",
+    "#9E5D6A",
+    "#5A4A4D",
   ];
   let hash = 0;
   for (let i = 0; i < name.length; i++) {
@@ -147,7 +146,7 @@ const AllContact = () => {
       if (!result.error) {
         toast.info(
           result.isFavorite
-            ? `Marked [${result.name}] as Favorite ⭐`
+            ? `Marked [${result.name}] as Favorite`
             : `Removed [${result.name}] from Favorites`
         );
       } else {
@@ -421,503 +420,519 @@ const AllContact = () => {
   };
 
   return (
-    <>
-      <div>
-        {/* Header Section */}
-        <div className="d-flex justify-content-between align-items-center my-3 flex-wrap gap-2">
-          <div>
-            <h1 className="mb-0">Your Contacts</h1>
-            <p className="text-muted mb-0">
-              Manage your personal and professional connections.
-            </p>
-          </div>
-          <div className="d-flex gap-2 flex-wrap">
-            <button
-              onClick={() => setShowImportModal(true)}
-              className="btn btn-outline-info"
-              title="Import contacts from CSV"
-            >
-              📥 Import CSV
-            </button>
-            <button
-              onClick={handleExportCSV}
-              className="btn btn-outline-success"
-              title="Export contacts to CSV"
-            >
-              📤 Export CSV
-            </button>
-            <button
-              onClick={fetchContacts}
-              className="btn btn-outline-secondary"
-            >
-              Refresh
-            </button>
-            <Link to="/create" className="btn btn-primary">
-              + Add Contact
-            </Link>
-          </div>
+    <div className="py-2">
+      {/* Header Section */}
+      <div className="d-flex justify-content-between align-items-center my-3 flex-wrap gap-2">
+        <div>
+          <h1 className="mb-1">YOUR CONTACTS</h1>
+          <p
+            className="text-muted mb-0 small"
+            style={{ fontFamily: "var(--cms-font-serif)" }}
+          >
+            Manage your personal and professional connections.
+          </p>
         </div>
+        <div className="d-flex gap-2 flex-wrap">
+          <button
+            onClick={() => setShowImportModal(true)}
+            className="btn btn-outline-secondary"
+            title="Import contacts from CSV"
+          >
+            IMPORT CSV
+          </button>
+          <button
+            onClick={handleExportCSV}
+            className="btn btn-outline-secondary"
+            title="Export contacts to CSV"
+          >
+            EXPORT CSV
+          </button>
+          <button
+            onClick={fetchContacts}
+            className="btn btn-outline-secondary"
+          >
+            REFRESH
+          </button>
+          <Link to="/create" className="btn btn-primary">
+            ADD CONTACT
+          </Link>
+        </div>
+      </div>
 
-        <hr className="my-3" />
+      <hr style={{ borderColor: "var(--cms-border-subtle)" }} />
 
-        {loading ? (
-          <Spinner splash="Loading Contacts..." />
-        ) : (
-          <>
-            {contacts.length === 0 ? (
-              <div className="text-center py-5">
-                <h3>No contacts created yet</h3>
-                <p className="text-muted">
-                  Get started by adding your first contact or importing a CSV file.
-                </p>
-                <div className="d-flex justify-content-center gap-2 mt-3">
-                  <Link to="/create" className="btn btn-info">
-                    Add Your First Contact
-                  </Link>
-                  <button
-                    onClick={() => setShowImportModal(true)}
-                    className="btn btn-outline-secondary"
+      {loading ? (
+        <Spinner splash="LOADING CONTACTS..." />
+      ) : (
+        <>
+          {contacts.length === 0 ? (
+            <div className="card text-center py-5 my-4">
+              <h3 className="mb-2">NO CONTACTS CREATED YET</h3>
+              <p
+                className="text-muted small mb-4"
+                style={{ fontFamily: "var(--cms-font-serif)" }}
+              >
+                Get started by adding your first contact or importing a CSV file.
+              </p>
+              <div className="d-flex justify-content-center gap-2">
+                <Link to="/create" className="btn btn-primary">
+                  ADD FIRST CONTACT
+                </Link>
+                <button
+                  onClick={() => setShowImportModal(true)}
+                  className="btn btn-outline-secondary"
+                >
+                  IMPORT CSV
+                </button>
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Search Bar + Controls */}
+              <div className="row g-2 my-2 align-items-center">
+                <div className="col-lg-5 col-md-6">
+                  <div className="input-group">
+                    <input
+                      type="text"
+                      name="searchInput"
+                      id="searchInput"
+                      className="form-control"
+                      placeholder="Search by name, phone, email, group..."
+                      value={searchInput}
+                      onChange={(e) => setSearchInput(e.target.value)}
+                      autoComplete="off"
+                    />
+                    {searchInput && (
+                      <button
+                        className="btn btn-outline-secondary"
+                        type="button"
+                        onClick={() => setSearchInput("")}
+                      >
+                        CLEAR
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Sorting Dropdown */}
+                <div className="col-lg-3 col-md-3 col-6">
+                  <select
+                    className="form-select"
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    title="Sort contacts"
                   >
-                    Import CSV
+                    <option value="name-asc">Sort: Name (A-Z)</option>
+                    <option value="name-desc">Sort: Name (Z-A)</option>
+                    <option value="date-desc">Sort: Newest First</option>
+                    <option value="date-asc">Sort: Oldest First</option>
+                  </select>
+                </div>
+
+                {/* Page Size Selector (10 or 20) */}
+                <div className="col-lg-2 col-md-3 col-6">
+                  <select
+                    className="form-select"
+                    value={pageSize}
+                    onChange={(e) => setPageSize(Number(e.target.value))}
+                    title="Contacts per page"
+                  >
+                    <option value={10}>10 per page</option>
+                    <option value={20}>20 per page</option>
+                  </select>
+                </div>
+
+                {/* Favorites Quick Filter */}
+                <div className="col-lg-2 col-12 text-lg-end">
+                  <button
+                    type="button"
+                    className={`btn ${
+                      onlyFavorites
+                        ? "btn-primary"
+                        : "btn-outline-secondary"
+                    } w-100`}
+                    onClick={() => setOnlyFavorites(!onlyFavorites)}
+                  >
+                    {onlyFavorites ? "FAVORITES ONLY" : "FILTER FAVORITES"}
                   </button>
                 </div>
               </div>
-            ) : (
-              <>
-                {/* Search Bar + Controls */}
-                <div className="row g-2 my-2 align-items-center">
-                  <div className="col-lg-5 col-md-6">
-                    <div className="input-group">
-                      <input
-                        type="text"
-                        name="searchInput"
-                        id="searchInput"
-                        className="form-control"
-                        placeholder="Search by name, phone, email, group..."
-                        value={searchInput}
-                        onChange={(e) => setSearchInput(e.target.value)}
-                        autoComplete="off"
-                      />
-                      {searchInput && (
-                        <button
-                          className="btn btn-outline-secondary"
-                          type="button"
-                          onClick={() => setSearchInput("")}
-                        >
-                          Clear
-                        </button>
-                      )}
-                    </div>
-                  </div>
 
-                  {/* Sorting Dropdown */}
-                  <div className="col-lg-3 col-md-3 col-6">
-                    <select
-                      className="form-select"
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value)}
-                      title="Sort contacts"
-                    >
-                      <option value="name-asc">Sort: Name (A-Z)</option>
-                      <option value="name-desc">Sort: Name (Z-A)</option>
-                      <option value="date-desc">Sort: Newest First</option>
-                      <option value="date-asc">Sort: Oldest First</option>
-                    </select>
-                  </div>
-
-                  {/* Page Size Selector (10 or 20) */}
-                  <div className="col-lg-2 col-md-3 col-6">
-                    <select
-                      className="form-select"
-                      value={pageSize}
-                      onChange={(e) => setPageSize(Number(e.target.value))}
-                      title="Contacts per page"
-                    >
-                      <option value={10}>10 per page</option>
-                      <option value={20}>20 per page</option>
-                    </select>
-                  </div>
-
-                  {/* Favorites Quick Filter */}
-                  <div className="col-lg-2 col-12 text-lg-end">
-                    <button
-                      type="button"
-                      className={`btn btn-sm ${
-                        onlyFavorites
-                          ? "btn-warning text-dark fw-bold"
-                          : "btn-outline-warning"
-                      } w-100`}
-                      onClick={() => setOnlyFavorites(!onlyFavorites)}
-                    >
-                      {onlyFavorites ? "⭐ Favorites Only" : "⭐ Filter Favorites"}
-                    </button>
-                  </div>
-                </div>
-
-                {/* Group / Tag Filter Pills */}
-                <div className="d-flex align-items-center flex-wrap gap-2 my-3">
-                  <span className="text-muted me-1 fw-semibold">
-                    <small>Filter by Tag:</small>
-                  </span>
-                  {allGroups.map((grp) => (
-                    <button
-                      key={grp}
-                      type="button"
-                      className={`btn btn-sm ${
-                        selectedGroup === grp
-                          ? "btn-dark fw-bold"
-                          : "btn-outline-secondary"
-                      }`}
-                      onClick={() => setSelectedGroup(grp)}
-                    >
-                      {grp}
-                    </button>
-                  ))}
-                  {selectedGroup !== "All" && (
-                    <button
-                      type="button"
-                      className="btn btn-sm btn-link text-decoration-none"
-                      onClick={() => setSelectedGroup("All")}
-                    >
-                      Reset Tag
-                    </button>
-                  )}
-                </div>
-
-                {/* Bulk Actions Bar (appears when 1 or more contacts are selected) */}
-                {selectedIds.length > 0 && (
-                  <div className="alert alert-primary d-flex justify-content-between align-items-center py-2 px-3 my-2 flex-wrap gap-2 shadow-sm border-0">
-                    <div className="d-flex align-items-center gap-2">
-                      <span className="badge bg-dark fs-6">
-                        {selectedIds.length}
-                      </span>
-                      <strong className="text-primary">
-                        contact(s) selected
-                      </strong>
-                    </div>
-                    <div className="d-flex gap-2">
-                      <button
-                        type="button"
-                        className="btn btn-sm btn-outline-primary bg-white"
-                        onClick={() => setShowBulkTagModal(true)}
-                      >
-                        🏷️ Assign Tag
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-sm btn-danger"
-                        onClick={() => setShowBulkDeleteModal(true)}
-                      >
-                        🗑️ Delete Selected
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-sm btn-outline-secondary bg-white"
-                        onClick={() => setSelectedIds([])}
-                      >
-                        Deselect All
-                      </button>
-                    </div>
-                  </div>
+              {/* Group / Tag Filter Pills */}
+              <div className="d-flex align-items-center flex-wrap gap-2 my-3">
+                <span
+                  className="small fw-semibold me-1 text-uppercase"
+                  style={{ fontFamily: "var(--cms-font-serif)" }}
+                >
+                  Filter Tag:
+                </span>
+                {allGroups.map((grp) => (
+                  <button
+                    key={grp}
+                    type="button"
+                    className={`btn btn-sm ${
+                      selectedGroup === grp
+                        ? "btn-primary"
+                        : "btn-outline-secondary"
+                    }`}
+                    style={{ padding: "4px 12px", fontSize: "0.75rem" }}
+                    onClick={() => setSelectedGroup(grp)}
+                  >
+                    {grp}
+                  </button>
+                ))}
+                {selectedGroup !== "All" && (
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-link text-decoration-none"
+                    onClick={() => setSelectedGroup("All")}
+                    style={{ fontSize: "0.8rem" }}
+                  >
+                    Reset Tag
+                  </button>
                 )}
+              </div>
 
-                {/* Result count indicator */}
-                <div className="d-flex justify-content-between align-items-center my-2 text-muted small">
-                  <span>
-                    Showing{" "}
-                    <strong>
-                      {totalItems > 0 ? startIndex + 1 : 0} -{" "}
-                      {Math.min(startIndex + pageSize, totalItems)}
-                    </strong>{" "}
-                    of <strong>{totalItems}</strong> contacts
-                    {totalItems !== contacts.length && (
-                      <span> (filtered from {contacts.length} total)</span>
-                    )}
-                  </span>
-                  {totalPages > 1 && (
-                    <span>
-                      Page <strong>{validCurrentPage}</strong> of{" "}
-                      <strong>{totalPages}</strong>
+              {/* Bulk Actions Bar */}
+              {selectedIds.length > 0 && (
+                <div
+                  className="p-3 my-3 rounded d-flex justify-content-between align-items-center flex-wrap gap-2 shadow-sm border"
+                  style={{
+                    backgroundColor: "var(--cms-card-bg)",
+                    borderColor: "var(--cms-input-border)",
+                  }}
+                >
+                  <div className="d-flex align-items-center gap-2">
+                    <span
+                      className="badge bg-dark fs-6"
+                      style={{ padding: "6px 12px" }}
+                    >
+                      {selectedIds.length}
                     </span>
-                  )}
-                </div>
-
-                {filteredAndSortedContacts.length === 0 ? (
-                  <div className="alert alert-warning text-center mt-3">
-                    No contacts found matching your current search and filters.
+                    <strong style={{ fontFamily: "var(--cms-font-heading)", letterSpacing: "1px" }}>
+                      CONTACT(S) SELECTED
+                    </strong>
+                  </div>
+                  <div className="d-flex gap-2 flex-wrap">
                     <button
-                      className="btn btn-link btn-sm ms-2"
+                      type="button"
+                      className="btn btn-sm btn-outline-secondary"
+                      onClick={() => setShowBulkTagModal(true)}
+                    >
+                      ASSIGN TAG
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-danger"
+                      onClick={() => setShowBulkDeleteModal(true)}
+                    >
+                      DELETE SELECTED
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-outline-secondary"
+                      onClick={() => setSelectedIds([])}
+                    >
+                      DESELECT ALL
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Result count indicator */}
+              <div
+                className="d-flex justify-content-between align-items-center my-2 small text-muted"
+                style={{ fontFamily: "var(--cms-font-serif)" }}
+              >
+                <span>
+                  Showing{" "}
+                  <strong>
+                    {totalItems > 0 ? startIndex + 1 : 0} -{" "}
+                    {Math.min(startIndex + pageSize, totalItems)}
+                  </strong>{" "}
+                  of <strong>{totalItems}</strong> contacts
+                  {totalItems !== contacts.length && (
+                    <span> (filtered from {contacts.length} total)</span>
+                  )}
+                </span>
+                {totalPages > 1 && (
+                  <span>
+                    Page <strong>{validCurrentPage}</strong> of{" "}
+                    <strong>{totalPages}</strong>
+                  </span>
+                )}
+              </div>
+
+              {filteredAndSortedContacts.length === 0 ? (
+                <div className="card p-4 text-center my-3">
+                  <p className="mb-2">
+                    No contacts found matching your current search and filters.
+                  </p>
+                  <div>
+                    <button
+                      className="btn btn-sm btn-outline-secondary"
                       onClick={() => {
                         setSearchInput("");
                         setSelectedGroup("All");
                         setOnlyFavorites(false);
                       }}
                     >
-                      Reset all filters
+                      RESET FILTERS
                     </button>
                   </div>
-                ) : (
-                  <>
-                    {/* Contacts Table */}
-                    <div className="table-responsive">
-                      <table className="table table-hover align-middle">
-                        <thead>
-                          <tr className="table-dark">
-                            <th scope="col" style={{ width: "35px" }}>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                checked={isAllCurrentPageSelected}
-                                onChange={handleSelectAll}
-                                title="Select/Deselect all on this page"
-                              />
-                            </th>
-                            <th scope="col" style={{ width: "30px" }}></th>
-                            <th scope="col" style={{ width: "45px" }}></th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Tag / Group</th>
-                            <th scope="col">Company</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Phone</th>
-                            <th scope="col">Address</th>
-                            <th scope="col" className="text-center">
-                              Actions
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {paginatedContacts.map((contact) => {
-                            const isSelected = selectedIds.includes(contact._id);
-                            return (
-                              <tr
-                                key={contact._id}
-                                className={isSelected ? "table-active" : ""}
-                                style={{ cursor: "pointer" }}
-                                onClick={() => {
-                                  setModalData(contact);
-                                  setShowModal(true);
-                                }}
-                              >
-                                {/* Checkbox Column */}
-                                <td onClick={(e) => e.stopPropagation()}>
-                                  <input
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    checked={isSelected}
-                                    onChange={(e) =>
-                                      handleRowSelect(contact._id, e)
-                                    }
-                                  />
-                                </td>
-
-                                {/* Favorite Star Button */}
-                                <td
-                                  onClick={(e) => toggleFavorite(contact, e)}
-                                  title={
-                                    contact.isFavorite
-                                      ? "Starred (Click to remove)"
-                                      : "Click to Star"
+                </div>
+              ) : (
+                <>
+                  {/* Contacts Table */}
+                  <div className="table-responsive">
+                    <table className="table align-middle mb-0">
+                      <thead>
+                        <tr>
+                          <th scope="col" style={{ width: "35px" }}>
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              checked={isAllCurrentPageSelected}
+                              onChange={handleSelectAll}
+                              title="Select/Deselect all on this page"
+                            />
+                          </th>
+                          <th scope="col" style={{ width: "30px" }}></th>
+                          <th scope="col" style={{ width: "45px" }}></th>
+                          <th scope="col">NAME</th>
+                          <th scope="col">TAG / GROUP</th>
+                          <th scope="col">COMPANY</th>
+                          <th scope="col">EMAIL</th>
+                          <th scope="col">PHONE</th>
+                          <th scope="col">ADDRESS</th>
+                          <th scope="col" className="text-center">
+                            ACTIONS
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {paginatedContacts.map((contact) => {
+                          const isSelected = selectedIds.includes(contact._id);
+                          return (
+                            <tr
+                              key={contact._id}
+                              className={isSelected ? "table-active" : ""}
+                              style={{ cursor: "pointer" }}
+                              onClick={() => {
+                                setModalData(contact);
+                                setShowModal(true);
+                              }}
+                            >
+                              {/* Checkbox Column */}
+                              <td onClick={(e) => e.stopPropagation()}>
+                                <input
+                                  className="form-check-input"
+                                  type="checkbox"
+                                  checked={isSelected}
+                                  onChange={(e) =>
+                                    handleRowSelect(contact._id, e)
                                   }
-                                  style={{
-                                    fontSize: "1.2rem",
-                                    cursor: "pointer",
-                                  }}
-                                  className="text-center"
-                                >
-                                  {contact.isFavorite ? (
-                                    <span style={{ color: "#f59e0b" }}>★</span>
-                                  ) : (
-                                    <span className="text-muted opacity-50">
-                                      ☆
-                                    </span>
-                                  )}
-                                </td>
+                                />
+                              </td>
 
-                                {/* Profile Photo / Avatar Column */}
-                                <td>
-                                  {contact.photo ? (
-                                    <img
-                                      src={contact.photo}
-                                      alt={contact.name}
-                                      style={{
-                                        width: "38px",
-                                        height: "38px",
-                                        borderRadius: "50%",
-                                        objectFit: "cover",
-                                        border: "1px solid #cbd5e1",
-                                      }}
-                                    />
-                                  ) : (
-                                    <div
-                                      style={{
-                                        width: "38px",
-                                        height: "38px",
-                                        borderRadius: "50%",
-                                        backgroundColor: getAvatarColor(
-                                          contact.name
-                                        ),
-                                        color: "#fff",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        fontWeight: "bold",
-                                        fontSize: "0.85rem",
-                                      }}
-                                    >
-                                      {getInitials(contact.name)}
-                                    </div>
-                                  )}
-                                </td>
-
-                                <th scope="row" className="fw-semibold">
-                                  {contact.name}
-                                  {contact.isFavorite && (
-                                    <span className="badge bg-warning text-dark ms-2 small">
-                                      Top
-                                    </span>
-                                  )}
-                                  {contact.birthday && (
-                                    <span
-                                      className="ms-1"
-                                      title={`Birthday: ${formatBirthdayDisplay(
-                                        contact.birthday
-                                      )}`}
-                                    >
-                                      🎂
-                                    </span>
-                                  )}
-                                </th>
-
-                                {/* Group / Tag badge */}
-                                <td>
-                                  <span
-                                    className={`badge ${getGroupBadgeClass(
-                                      contact.group
-                                    )}`}
-                                  >
-                                    {contact.group || "Other"}
-                                  </span>
-                                </td>
-
-                                <td>
-                                  {contact.company ? (
-                                    <span className="badge bg-secondary">
-                                      {contact.company}
-                                    </span>
-                                  ) : (
-                                    <span className="text-muted">—</span>
-                                  )}
-                                </td>
-                                <td>{contact.email}</td>
-                                <td>{contact.phone}</td>
-                                <td
-                                  className="text-truncate"
-                                  style={{ maxWidth: "160px" }}
-                                >
-                                  {contact.address}
-                                </td>
-                                <td
-                                  className="text-center"
-                                  onClick={(e) => e.stopPropagation()}
-                                >
-                                  <Link
-                                    className="btn btn-sm btn-outline-info me-2"
-                                    to={`/edit/${contact._id}`}
-                                  >
-                                    Edit
-                                  </Link>
-                                  <button
-                                    className="btn btn-sm btn-outline-danger"
-                                    onClick={() => triggerDelete(contact)}
-                                  >
-                                    Delete
-                                  </button>
-                                </td>
-                              </tr>
-                            );
-                          })}
-                        </tbody>
-                      </table>
-                    </div>
-
-                    {/* Pagination Controls */}
-                    {totalPages > 1 && (
-                      <nav
-                        aria-label="Contact pagination"
-                        className="d-flex justify-content-center my-3"
-                      >
-                        <ul className="pagination mb-0">
-                          <li
-                            className={`page-item ${
-                              validCurrentPage === 1 ? "disabled" : ""
-                            }`}
-                          >
-                            <button
-                              className="page-link"
-                              onClick={() =>
-                                setCurrentPage((p) => Math.max(1, p - 1))
-                              }
-                            >
-                              &laquo; Prev
-                            </button>
-                          </li>
-
-                          {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                            (pageNumber) => (
-                              <li
-                                key={pageNumber}
-                                className={`page-item ${
-                                  validCurrentPage === pageNumber ? "active" : ""
-                                }`}
+                              {/* Favorite Star Button */}
+                              <td
+                                onClick={(e) => toggleFavorite(contact, e)}
+                                title={
+                                  contact.isFavorite
+                                    ? "Starred (Click to remove)"
+                                    : "Click to Star"
+                                }
+                                style={{
+                                  fontSize: "1.2rem",
+                                  cursor: "pointer",
+                                }}
+                                className="text-center"
                               >
-                                <button
-                                  className="page-link"
-                                  onClick={() => setCurrentPage(pageNumber)}
-                                >
-                                  {pageNumber}
-                                </button>
-                              </li>
-                            )
-                          )}
+                                {contact.isFavorite ? (
+                                  <span style={{ color: "#BF788C" }}>★</span>
+                                ) : (
+                                  <span style={{ color: "#B89298" }}>
+                                    ☆
+                                  </span>
+                                )}
+                              </td>
 
-                          <li
-                            className={`page-item ${
-                              validCurrentPage === totalPages ? "disabled" : ""
-                            }`}
+                              {/* Profile Photo Column */}
+                              <td>
+                                {contact.photo ? (
+                                  <img
+                                    src={contact.photo}
+                                    alt={contact.name}
+                                    style={{
+                                      width: "38px",
+                                      height: "38px",
+                                      borderRadius: "50%",
+                                      objectFit: "cover",
+                                      border: "1.5px solid var(--cms-input-border)",
+                                    }}
+                                  />
+                                ) : (
+                                  <div
+                                    style={{
+                                      width: "38px",
+                                      height: "38px",
+                                      borderRadius: "50%",
+                                      backgroundColor: getAvatarColor(
+                                        contact.name
+                                      ),
+                                      color: "#fff",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                      fontWeight: "bold",
+                                      fontSize: "0.85rem",
+                                      fontFamily: "var(--cms-font-heading)",
+                                    }}
+                                  >
+                                    {getInitials(contact.name)}
+                                  </div>
+                                )}
+                              </td>
+
+                              <th scope="row" className="fw-semibold">
+                                {contact.name}
+                                {contact.isFavorite && (
+                                  <span
+                                    className="badge ms-2"
+                                    style={{
+                                      backgroundColor: "var(--cms-btn-primary)",
+                                      color: "var(--cms-btn-text)",
+                                    }}
+                                  >
+                                    TOP
+                                  </span>
+                                )}
+                              </th>
+
+                              <td>
+                                <span
+                                  className={`badge ${getGroupBadgeClass(
+                                    contact.group
+                                  )}`}
+                                >
+                                  {contact.group || "Other"}
+                                </span>
+                              </td>
+
+                              <td>
+                                {contact.company ? (
+                                  <span className="badge bg-secondary">
+                                    {contact.company}
+                                  </span>
+                                ) : (
+                                  <span className="text-muted">—</span>
+                                )}
+                              </td>
+                              <td>{contact.email}</td>
+                              <td>{contact.phone}</td>
+                              <td
+                                className="text-truncate"
+                                style={{ maxWidth: "160px" }}
+                              >
+                                {contact.address}
+                              </td>
+                              <td
+                                className="text-center"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <Link
+                                  className="btn btn-sm btn-outline-secondary me-2"
+                                  style={{ padding: "4px 10px", fontSize: "0.75rem" }}
+                                  to={`/edit/${contact._id}`}
+                                >
+                                  EDIT
+                                </Link>
+                                <button
+                                  className="btn btn-sm btn-danger"
+                                  style={{ padding: "4px 10px", fontSize: "0.75rem" }}
+                                  onClick={() => triggerDelete(contact)}
+                                >
+                                  DELETE
+                                </button>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Pagination Controls */}
+                  {totalPages > 1 && (
+                    <nav
+                      aria-label="Contact pagination"
+                      className="d-flex justify-content-center my-4"
+                    >
+                      <ul className="pagination mb-0">
+                        <li
+                          className={`page-item ${
+                            validCurrentPage === 1 ? "disabled" : ""
+                          }`}
+                        >
+                          <button
+                            className="page-link"
+                            onClick={() =>
+                              setCurrentPage((p) => Math.max(1, p - 1))
+                            }
                           >
-                            <button
-                              className="page-link"
-                              onClick={() =>
-                                setCurrentPage((p) =>
-                                  Math.min(totalPages, p + 1)
-                                )
-                              }
+                            &laquo; PREV
+                          </button>
+                        </li>
+
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                          (pageNumber) => (
+                            <li
+                              key={pageNumber}
+                              className={`page-item ${
+                                validCurrentPage === pageNumber ? "active" : ""
+                              }`}
                             >
-                              Next &raquo;
-                            </button>
-                          </li>
-                        </ul>
-                      </nav>
-                    )}
-                  </>
-                )}
-              </>
-            )}
-          </>
-        )}
-      </div>
+                              <button
+                                className="page-link"
+                                onClick={() => setCurrentPage(pageNumber)}
+                              >
+                                {pageNumber}
+                              </button>
+                            </li>
+                          )
+                        )}
+
+                        <li
+                          className={`page-item ${
+                            validCurrentPage === totalPages ? "disabled" : ""
+                          }`}
+                        >
+                          <button
+                            className="page-link"
+                            onClick={() =>
+                              setCurrentPage((p) =>
+                                Math.min(totalPages, p + 1)
+                              )
+                            }
+                          >
+                            NEXT &raquo;
+                          </button>
+                        </li>
+                      </ul>
+                    </nav>
+                  )}
+                </>
+              )}
+            </>
+          )}
+        </>
+      )}
 
       {/* Contact Details Modal */}
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
-          <Modal.Title className="d-flex align-items-center gap-2">
-            <span>{modalData.name}</span>
-            {modalData.isFavorite && (
-              <span title="Favorite" style={{ color: "#f59e0b" }}>
-                ★
-              </span>
-            )}
-          </Modal.Title>
+          <Modal.Title>{modalData.name}</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
@@ -928,19 +943,18 @@ const AllContact = () => {
                 src={modalData.photo}
                 alt={modalData.name}
                 style={{
-                  width: "90px",
-                  height: "90px",
+                  width: "85px",
+                  height: "85px",
                   borderRadius: "50%",
                   objectFit: "cover",
-                  border: "3px solid #cbd5e1",
-                  boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+                  border: "2px solid var(--cms-input-border)",
                 }}
               />
             ) : (
               <div
                 style={{
-                  width: "90px",
-                  height: "90px",
+                  width: "85px",
+                  height: "85px",
                   borderRadius: "50%",
                   backgroundColor: getAvatarColor(modalData.name || ""),
                   color: "#fff",
@@ -948,8 +962,8 @@ const AllContact = () => {
                   alignItems: "center",
                   justifyContent: "center",
                   fontWeight: "bold",
-                  fontSize: "2rem",
-                  boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+                  fontSize: "1.8rem",
+                  fontFamily: "var(--cms-font-heading)",
                 }}
               >
                 {getInitials(modalData.name || "")}
@@ -961,33 +975,40 @@ const AllContact = () => {
             </span>
           </div>
 
-          <hr />
+          <hr style={{ borderColor: "var(--cms-border-subtle)" }} />
 
           <div className="mb-2">
-            <strong>Company:</strong>{" "}
+            <strong style={{ fontFamily: "var(--cms-font-serif)", textTransform: "uppercase" }}>Company:</strong>{" "}
             {modalData.company || <span className="text-muted">—</span>}
           </div>
           <div className="mb-2">
-            <strong>Email:</strong>{" "}
+            <strong style={{ fontFamily: "var(--cms-font-serif)", textTransform: "uppercase" }}>Email:</strong>{" "}
             <a href={`mailto:${modalData.email}`}>{modalData.email}</a>
           </div>
           <div className="mb-2">
-            <strong>Phone Number:</strong>{" "}
+            <strong style={{ fontFamily: "var(--cms-font-serif)", textTransform: "uppercase" }}>Phone:</strong>{" "}
             <a href={`tel:${modalData.phone}`}>{modalData.phone}</a>
           </div>
           <div className="mb-2">
-            <strong>Address:</strong> {modalData.address}
+            <strong style={{ fontFamily: "var(--cms-font-serif)", textTransform: "uppercase" }}>Address:</strong>{" "}
+            {modalData.address}
           </div>
           {modalData.birthday && (
             <div className="mb-2">
-              <strong>🎂 Birthday:</strong>{" "}
+              <strong style={{ fontFamily: "var(--cms-font-serif)", textTransform: "uppercase" }}>Birthday:</strong>{" "}
               <span>{formatBirthdayDisplay(modalData.birthday)}</span>
             </div>
           )}
           {modalData.notes && (
-            <div className="mt-3 p-2 bg-light rounded">
-              <strong>Notes:</strong>
-              <p className="mb-0 text-muted" style={{ whiteSpace: "pre-wrap" }}>
+            <div
+              className="mt-3 p-3 rounded border"
+              style={{
+                backgroundColor: "var(--cms-card-inner)",
+                borderColor: "var(--cms-border-subtle)",
+              }}
+            >
+              <strong style={{ fontFamily: "var(--cms-font-serif)", textTransform: "uppercase" }}>Notes:</strong>
+              <p className="mb-0 text-muted small mt-1" style={{ whiteSpace: "pre-wrap" }}>
                 {modalData.notes}
               </p>
             </div>
@@ -997,14 +1018,14 @@ const AllContact = () => {
         <Modal.Footer>
           <button
             className={`btn ${
-              modalData.isFavorite ? "btn-warning" : "btn-outline-warning"
+              modalData.isFavorite ? "btn-primary" : "btn-outline-secondary"
             }`}
             onClick={() => toggleFavorite(modalData)}
           >
-            {modalData.isFavorite ? "★ Favorited" : "☆ Add to Favorites"}
+            {modalData.isFavorite ? "FAVORITED" : "ADD TO FAVORITES"}
           </button>
-          <Link className="btn btn-info" to={`/edit/${modalData._id}`}>
-            Edit
+          <Link className="btn btn-outline-secondary" to={`/edit/${modalData._id}`}>
+            EDIT
           </Link>
           <button
             className="btn btn-danger"
@@ -1013,13 +1034,13 @@ const AllContact = () => {
               triggerDelete(modalData);
             }}
           >
-            Delete
+            DELETE
           </button>
           <button
-            className="btn btn-secondary"
+            className="btn btn-outline-secondary"
             onClick={() => setShowModal(false)}
           >
-            Close
+            CLOSE
           </button>
         </Modal.Footer>
       </Modal>
@@ -1031,24 +1052,24 @@ const AllContact = () => {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>Confirm Delete</Modal.Title>
+          <Modal.Title>CONFIRM DELETE</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           Are you sure you want to delete contact{" "}
           <strong>{contactToDelete?.name}</strong>?
-          <p className="text-danger mt-2 mb-0">
-            <small>This action cannot be undone.</small>
+          <p className="text-danger mt-2 mb-0 small">
+            This action cannot be undone.
           </p>
         </Modal.Body>
         <Modal.Footer>
           <button
-            className="btn btn-secondary"
+            className="btn btn-outline-secondary"
             onClick={() => setShowDeleteConfirm(false)}
           >
-            Cancel
+            CANCEL
           </button>
           <button className="btn btn-danger" onClick={confirmDelete}>
-            Yes, Delete
+            YES, DELETE
           </button>
         </Modal.Footer>
       </Modal>
@@ -1059,26 +1080,26 @@ const AllContact = () => {
         onHide={() => setShowBulkDeleteModal(false)}
         centered
       >
-        <Modal.Header closeButton className="bg-danger text-white">
-          <Modal.Title>🗑️ Delete Multiple Contacts</Modal.Title>
+        <Modal.Header closeButton>
+          <Modal.Title>DELETE MULTIPLE CONTACTS</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <p>
             Are you sure you want to permanently delete{" "}
             <strong>{selectedIds.length}</strong> selected contact(s)?
           </p>
-          <p className="text-danger mb-0">
-            <small>This action cannot be undone.</small>
+          <p className="text-danger mb-0 small">
+            This action cannot be undone.
           </p>
         </Modal.Body>
         <Modal.Footer>
           <button
             type="button"
-            className="btn btn-secondary"
+            className="btn btn-outline-secondary"
             onClick={() => setShowBulkDeleteModal(false)}
             disabled={isBulkActionBusy}
           >
-            Cancel
+            CANCEL
           </button>
           <button
             type="button"
@@ -1086,7 +1107,7 @@ const AllContact = () => {
             onClick={handleBulkDelete}
             disabled={isBulkActionBusy}
           >
-            {isBulkActionBusy ? "Deleting..." : `Delete ${selectedIds.length} Contacts`}
+            {isBulkActionBusy ? "DELETING..." : `DELETE ${selectedIds.length} CONTACTS`}
           </button>
         </Modal.Footer>
       </Modal>
@@ -1098,16 +1119,19 @@ const AllContact = () => {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>🏷️ Assign Tag to {selectedIds.length} Contacts</Modal.Title>
+          <Modal.Title>ASSIGN TAG TO {selectedIds.length} CONTACTS</Modal.Title>
         </Modal.Header>
         <form onSubmit={handleBulkTag}>
           <Modal.Body>
-            <p className="text-muted small">
-              Select or type a tag to apply to all {selectedIds.length} selected contacts.
+            <p
+              className="text-muted small"
+              style={{ fontFamily: "var(--cms-font-serif)" }}
+            >
+              Select or enter a tag to apply to all {selectedIds.length} selected contacts.
             </p>
             <div className="mb-3">
-              <label htmlFor="bulkTagSelect" className="form-label fw-semibold">
-                Select Tag / Group:
+              <label htmlFor="bulkTagSelect" className="form-label mb-2">
+                SELECT TAG / GROUP:
               </label>
               <select
                 id="bulkTagSelect"
@@ -1128,15 +1152,15 @@ const AllContact = () => {
               <div className="mb-3">
                 <label
                   htmlFor="bulkCustomTagInput"
-                  className="form-label fw-semibold"
+                  className="form-label mb-2"
                 >
-                  Custom Tag Name:
+                  CUSTOM TAG NAME:
                 </label>
                 <input
                   type="text"
                   id="bulkCustomTagInput"
                   className="form-control"
-                  placeholder="e.g. Clients, Gym, Project Alpha"
+                  placeholder="e.g. Clients, Club, VIP"
                   value={bulkCustomTag}
                   onChange={(e) => setBulkCustomTag(e.target.value)}
                   required
@@ -1147,18 +1171,18 @@ const AllContact = () => {
           <Modal.Footer>
             <button
               type="button"
-              className="btn btn-secondary"
+              className="btn btn-outline-secondary"
               onClick={() => setShowBulkTagModal(false)}
               disabled={isBulkActionBusy}
             >
-              Cancel
+              CANCEL
             </button>
             <button
               type="submit"
               className="btn btn-primary"
               disabled={isBulkActionBusy}
             >
-              {isBulkActionBusy ? "Applying..." : "Apply Tag"}
+              {isBulkActionBusy ? "APPLYING..." : "APPLY TAG"}
             </button>
           </Modal.Footer>
         </form>
@@ -1171,18 +1195,21 @@ const AllContact = () => {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>📥 Import Contacts from CSV</Modal.Title>
+          <Modal.Title>IMPORT CONTACTS FROM CSV</Modal.Title>
         </Modal.Header>
         <form onSubmit={handleImportSubmit}>
           <Modal.Body>
-            <p className="text-muted small">
+            <p
+              className="text-muted small"
+              style={{ fontFamily: "var(--cms-font-serif)" }}
+            >
               Upload a <code>.csv</code> file containing contacts. Columns
               supported: <strong>Name, Phone, Email, Address, Company, Tag, Birthday, Notes, Favorite</strong>.
             </p>
 
             <div className="mb-3">
-              <label htmlFor="csvFileInput" className="form-label fw-semibold">
-                Select CSV File:
+              <label htmlFor="csvFileInput" className="form-label mb-2">
+                SELECT CSV FILE:
               </label>
               <input
                 type="file"
@@ -1203,7 +1230,7 @@ const AllContact = () => {
                 checked={skipDuplicates}
                 onChange={(e) => setSkipDuplicates(e.target.checked)}
               />
-              <label className="form-check-label" htmlFor="skipDupCheck">
+              <label className="form-check-label small" htmlFor="skipDupCheck">
                 Skip duplicates (matching existing email or phone)
               </label>
             </div>
@@ -1211,10 +1238,10 @@ const AllContact = () => {
             <div className="border-top pt-2">
               <button
                 type="button"
-                className="btn btn-sm btn-link p-0 text-decoration-none"
+                className="btn btn-sm btn-link p-0"
                 onClick={downloadCSVTemplate}
               >
-                📄 Download sample CSV template
+                Download sample CSV template
               </button>
             </div>
           </Modal.Body>
@@ -1222,23 +1249,23 @@ const AllContact = () => {
           <Modal.Footer>
             <button
               type="button"
-              className="btn btn-secondary"
+              className="btn btn-outline-secondary"
               onClick={() => setShowImportModal(false)}
               disabled={isImporting}
             >
-              Cancel
+              CANCEL
             </button>
             <button
               type="submit"
               className="btn btn-primary"
               disabled={isImporting || !importFile}
             >
-              {isImporting ? "Importing..." : "Upload & Import"}
+              {isImporting ? "IMPORTING..." : "UPLOAD & IMPORT"}
             </button>
           </Modal.Footer>
         </form>
       </Modal>
-    </>
+    </div>
   );
 };
 

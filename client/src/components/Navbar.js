@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 import ToastContext from "../context/ToastContext";
 
-const Navbar = ({ title = "Contact Management System" }) => {
+const Navbar = ({ title = "CONTACT MANAGEMENT SYSTEM" }) => {
   const navigate = useNavigate();
   const { user, setUser } = useContext(AuthContext);
   const { toast } = useContext(ToastContext);
@@ -16,9 +16,9 @@ const Navbar = ({ title = "Contact Management System" }) => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
-      <div className="container-fluid">
-        <Link to="/" className="navbar-brand fw-bold">
+    <nav className="navbar navbar-expand-lg navbar-custom shadow-sm">
+      <div className="container-fluid px-md-4">
+        <Link to="/" className="navbar-brand">
           {title}
         </Link>
 
@@ -30,8 +30,12 @@ const Navbar = ({ title = "Contact Management System" }) => {
           aria-controls="navbarColor01"
           aria-expanded="false"
           aria-label="Toggle navigation"
+          style={{ borderColor: "var(--cms-navbar-text)" }}
         >
-          <span className="navbar-toggler-icon"></span>
+          <span
+            className="navbar-toggler-icon"
+            style={{ filter: "invert(80%) sepia(20%) hue-rotate(300deg)" }}
+          ></span>
         </button>
 
         <div className="collapse navbar-collapse" id="navbarColor01">
@@ -40,23 +44,29 @@ const Navbar = ({ title = "Contact Management System" }) => {
               <>
                 <li className="nav-item">
                   <Link to="/mycontacts" className="nav-link">
-                    Contacts
+                    CONTACTS
                   </Link>
                 </li>
                 <li className="nav-item">
                   <Link to="/create" className="nav-link">
-                    + Add Contact
+                    ADD CONTACT
                   </Link>
                 </li>
-                <li className="nav-item ms-lg-2 mt-2 mt-lg-0">
-                  <span className="badge bg-secondary me-2">
+                <li className="nav-item ms-lg-3 mt-2 mt-lg-0 d-flex align-items-center gap-2">
+                  <span
+                    className="badge"
+                    style={{
+                      backgroundColor: "var(--cms-btn-primary)",
+                      color: "var(--cms-btn-text)",
+                    }}
+                  >
                     {user.name}
                   </span>
                   <button
-                    className="btn btn-sm btn-danger"
+                    className="btn btn-sm btn-danger py-1 px-3"
                     onClick={handleLogout}
                   >
-                    Logout
+                    LOGOUT
                   </button>
                 </li>
               </>
@@ -64,12 +74,12 @@ const Navbar = ({ title = "Contact Management System" }) => {
               <>
                 <li className="nav-item">
                   <Link to="/login" className="nav-link">
-                    Login
+                    LOGIN
                   </Link>
                 </li>
                 <li className="nav-item">
                   <Link to="/register" className="nav-link">
-                    Register
+                    REGISTER
                   </Link>
                 </li>
               </>

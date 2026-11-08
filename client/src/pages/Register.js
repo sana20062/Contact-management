@@ -66,14 +66,15 @@ const Register = () => {
   };
 
   return (
-    <div className="row justify-content-center mt-4">
-      <div className="col-md-6 col-lg-5">
-        <div className="card shadow-sm p-4">
-          <h3 className="card-title text-center mb-3">Create an Account</h3>
+    <div className="row justify-content-center align-items-center py-4" style={{ minHeight: "75vh" }}>
+      <div className="col-11 col-sm-9 col-md-7 col-lg-5">
+        <div className="card p-4 p-md-5">
+          <h3 className="text-center mb-4">CREATE AN ACCOUNT</h3>
+
           <form onSubmit={handleSubmit} noValidate>
             <div className="form-group mb-3">
-              <label htmlFor="nameInput" className="form-label">
-                Full Name
+              <label htmlFor="nameInput" className="form-label mb-2">
+                FULL NAME
               </label>
               <input
                 type="text"
@@ -86,9 +87,10 @@ const Register = () => {
                 required
               />
             </div>
+
             <div className="form-group mb-3">
-              <label htmlFor="emailInput" className="form-label">
-                Email Address
+              <label htmlFor="emailInput" className="form-label mb-2">
+                EMAIL ADDRESS
               </label>
               <input
                 type="email"
@@ -101,9 +103,10 @@ const Register = () => {
                 required
               />
             </div>
+
             <div className="form-group mb-3">
-              <label htmlFor="passwordInput" className="form-label">
-                Password (min 6 characters)
+              <label htmlFor="passwordInput" className="form-label mb-2">
+                PASSWORD (MIN 6 CHARACTERS)
               </label>
               <input
                 type="password"
@@ -116,9 +119,10 @@ const Register = () => {
                 required
               />
             </div>
-            <div className="form-group mb-3">
-              <label htmlFor="confirmPassword" className="form-label">
-                Confirm Password
+
+            <div className="form-group mb-4">
+              <label htmlFor="confirmPassword" className="form-label mb-2">
+                CONFIRM PASSWORD
               </label>
               <input
                 type="password"
@@ -131,14 +135,16 @@ const Register = () => {
                 required
               />
             </div>
+
             <button
               type="submit"
-              className="btn btn-primary w-100 my-2"
+              className="btn btn-primary w-100 py-2 mb-3"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Registering..." : "Register"}
+              {isSubmitting ? "REGISTERING..." : "REGISTER"}
             </button>
-            <p className="text-center mt-3 mb-0">
+
+            <p className="text-center mt-3 mb-0 small" style={{ fontFamily: "var(--cms-font-serif)" }}>
               Already have an account? <Link to="/login">Login here</Link>
             </p>
           </form>
